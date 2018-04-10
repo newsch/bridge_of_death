@@ -1,0 +1,12 @@
+*.pdf
+# MATLAB autosave files
+
+*.asv
+
+# MATLAB data files
+
+*.mat
+
+# MATLAB figures
+
+*.fig
