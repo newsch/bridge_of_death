@@ -3,9 +3,9 @@
 %% Setup
 max_speed = 0.3;  % max speed of the robot
 d = 0.24;  % distance between wheels
-c = 0.25;  % speed up/slow down
-u_step = 0.25;
-u = [0:u_step:pi/c]';  % values to sweep through
+c = 0.125;  % speed up/slow down
+u_step = 0.125;
+u = [0:u_step:5/c]';  % values to sweep through
 
 % % circle with radius R
 % R = 0.9144;  % 3 feet in meters
@@ -14,13 +14,13 @@ u = [0:u_step:pi/c]';  % values to sweep through
 % % recommended ellipse
 % r = [0.5*cos(u*c), 0.75*sin(u*c)];
 
-% Challenge 1
-r = [0.3960*cos(2.65*(c*u + 1.4)), 0.99*sin(c*u + 1.4)];
+% % Challenge 1
+% r = [0.3960*cos(2.65*(c*u + 1.4)), 0.99*sin(c*u + 1.4)];
 
-% % Challenge 2
-% a = 0.4;
-% l = 0.4;
-% r = [-2*a*((l-cos(u)).*cos(u)+(1-l)), 2*a*(l-cos(u)).*sin(u)];
+% Challenge 2
+a = 0.4;
+l = 0.4;
+r = fliplr([-2*a*((l-cos(c*u)).*cos(c*u)+(1-l)), 2*a*(l-cos(c*u)).*sin(c*u)]);
 
 %% Calculate wheel velocities
 T = diff(r) ./ diff(u);  % velocity vector
@@ -31,16 +31,8 @@ N3 = [N, zeros(size(N(:, 1)))];  % add a third dim to N
 Omega = cross(T_hat3(1:end - 1, :), N3);  % rotational velocities
 V = sqrt(sum(T.^2, 2));  % linear velocities
 
-Vr = V(1:end-1,:) + d * sum(Omega, 2);
-Vl = V(1:end-1,:) - d * sum(Omega, 2);
-
-% V_comb = [Vr, Vl];
-% max_v = max(max(V_comb));
-% Omega = Omega * (0.3 / max_v);
-% V = V * (0.3 / max_v);
-% 
-% Vr = V(1:end-1,:) + d * sum(Omega, 2);
-% Vl = V(1:end-1,:) - d * sum(Omega, 2);
+Vr = V(1:end-1,:) + d / 2 * sum(Omega, 2);
+Vl = V(1:end-1,:) - d / 2 * sum(Omega, 2);
 
 %% Calculate each time step:
 distances = sqrt(sum(diff(r).^2, 2));
@@ -49,8 +41,8 @@ times = distances ./ V;
 %% Plot the predicted course
 figure; hold on
 plot(r(:,1),r(:,2))
-pos = [0, 0];  % position of robot
-head = 0;  % heading of robot
+pos = r(1,:);  % position of robot
+head = pi/12;  % heading of robot
 plot(pos(1),pos(2),'b*')
 for i = 1:length(u) - 2
     dt = times(i);
@@ -67,12 +59,13 @@ for i = 1:length(u) - 2
     head = new_head;
 end
 plot(pos(1),pos(2),'g*')
+axis equal
 
-% %% Run the robot
-% disp(max(Vr))
-% disp(max(Vl))
-% if max(Vr) > max_speed || max(Vl) > max_speed
-%     disp("WARNING: Velocities greater than max of "+string(max_speed)+".")
-% end
-% 
-% runCourse(times(1:end-1,:),Vr,Vl)
+%% Run the robot
+disp(max(Vr))
+disp(max(Vl))
+if max(Vr) > max_speed || max(Vl) > max_speed
+    disp("WARNING: Velocities greater than max of "+string(max_speed)+".")
+end
+
+runCourse(times(1:end-1,:),Vr,Vl)
