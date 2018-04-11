@@ -39,6 +39,23 @@ distances = sqrt(sum(diff(r).^2, 2));
 times = distances ./ V;
 
 %% Plot the predicted course
+clf;
+figure;
+hold on
+plot(r(:,1),r(:,2))
+pos = zeros(length(Pl), 3); %x, y, theta
+dt = times;
+lin_vel = (Vl+ Vr)/2;
+ang_vel = (Vr - Vl)/d;
+
+for i = 2:1:length(times) - 2
+    T_hat = [cos(pos(i - 1, 3)), sin(pos(i - 1, 3))];
+    pos(i, 1) = (lin_vel(i) * dt(i) * T_hat(1)) + pos(i - 1, 1);
+    pos(i, 2) = (lin_vel(i) * dt(i) * T_hat(2)) + pos(i - 1, 2);
+    pos(i, 3) = (ang_vel(i) * dt(i)) + pos(i - 1, 3);
+end
+plot(pos(:, 1), pos(:, 2), 'ro')
+
 figure; hold on
 plot(r(:,1),r(:,2))
 pos = r(1,:);  % position of robot
