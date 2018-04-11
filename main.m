@@ -55,6 +55,7 @@ for i = 2:1:length(times) - 2
     pos(i, 3) = (ang_vel(i) * dt(i)) + pos(i - 1, 3);
 end
 plot(pos(:, 1), pos(:, 2), 'ro')
+title('hi')
 
 figure; hold on
 plot(r(:,1),r(:,2))
