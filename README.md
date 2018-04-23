@@ -7,4 +7,6 @@ _Stop! Who would cross the Bridge of Death must answer me these questions three,
 
 Answering these questions and crossing the Bridge of Death™ is the goal of this project.
 
-Built by Evan New-Schmidt and Jonathan Zerez for the Quantitative Engineering Analysis course at Olin College of Engineering.
+View it in action [here](https://youtu.be/9zWqHOggKSs).
+
+_Built by Evan New-Schmidt and Jonathan Zerez for the Quantitative Engineering Analysis course at Olin College of Engineering._
